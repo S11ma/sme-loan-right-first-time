@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <style>
+      body { font-family: Arial, sans-serif; font-size: 13px; }
+      .bubble-user { background:#e3f2fd; padding:8px; margin:4px 0; border-radius:6px; }
+      .bubble-bot { background:#f1f8e9; padding:8px; margin:4px 0; border-radius:6px; }
+      label { display:block; margin-top:6px; }
+      input, select { width:100%; padding:4px; margin-top:2px; }
+      button { margin-top:10px; padding:6px 10px; }
+    </style>
+  </head>
+  <body>
+    <div class="bubble-bot">
+      Hi! I am the SME pre‑screen bot.<br>
+      Answer these few questions and I will tell you if the application is
+      <b>Ready, On Hold or Rejected</b>.
+    </div>
+
+    <label>Applicant ID</label>
+    <input type="text" id="applicantId" placeholder="e.g. SMEUser251">
+
+    <label>Applicant's Industry</label>
+    <select id="industry">
+      <option value="">--Select--</option>
+      <option>Services</option>
+      <option>Trading</option>
+      <option>Manufacturing</option>
+    </select>
+
+    <label>Loan Amount Requested</label>
+    <input type="number" id="amount" placeholder="e.g. 1000000">
+
+    <label>Applicant's Category</label>
+    <select id="category">
+      <option value="">--Select--</option>
+      <option>Small</option>
+      <option>Medium</option>
+      <option>Large</option>
+    </select>
+
+    <label>Income Documents Submitted?</label>
+    <select id="incomeDoc">
+      <option value="">--Select--</option>
+      <option>Yes</option>
+      <option>No</option>
+    </select>
+
+    <label>KYC Submitted?</label>
+    <select id="kyc">
+      <option value="">--Select--</option>
+      <option>Yes</option>
+      <option>No</option>
+    </select>
+
+    <label>Business Proof Submitted?</label>
+    <select id="business">
+      <option value="">--Select--</option>
+      <option>Yes</option>
+      <option>No</option>
+    </select>
+
+    <button onclick="submitBot()">Ask Bot</button>
+
+    <div id="chatArea"></div>
+
+    <script>
+      function addMessage(text, cls) {
+        var div = document.createElement('div');
+        div.className = cls;
+        div.innerHTML = text;
+        document.getElementById('chatArea').appendChild(div);
+      }
+
+      function submitBot() {
+        var payload = {
+          applicantId: document.getElementById('applicantId').value,
+          industry   : document.getElementById('industry').value,
+          amount     : document.getElementById('amount').value,
+          category   : document.getElementById('category').value,
+          incomeDoc  : document.getElementById('incomeDoc').value,
+          kyc        : document.getElementById('kyc').value,
+          business   : document.getElementById('business').value
+        };
+
+        addMessage(
+          'User: ID=' + payload.applicantId +
+          ', Industry=' + payload.industry +
+          ', Docs [Income=' + payload.incomeDoc +
+          ', KYC=' + payload.kyc +
+          ', Business=' + payload.business + ']',
+          'bubble-user'
+        );
+
+        google.script.run
+          .withSuccessHandler(function(status) {
+            addMessage('Bot: Final status → <b>' + status + '</b>', 'bubble-bot');
+          })
+          .withFailureHandler(function(err) {
+            addMessage('Bot error: ' + err.message, 'bubble-bot');
+          })
+          .submitChatbotApplication(payload);
+      }
+    </script>
+  </body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- <!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <style>
+      body { font-family: Arial, sans-serif; font-size: 13px; }
+      .bubble-user { background:#e3f2fd; padding:8px; margin:4px 0; border-radius:6px; }
+      .bubble-bot { background:#f1f8e9; padding:8px; margin:4px 0; border-radius:6px; }
+      label { display:block; margin-top:6px; }
+      input, select { width:100%; padding:4px; margin-top:2px; }
+      button { margin-top:10px; padding:6px 10px; }
+    </style>
+  </head>
+  <body>
+    <div class="bubble-bot">
+      Hi! I am the SME pre‑screen bot.<br>
+      Answer these few questions and I will tell you if the application is
+      <b>Ready, On Hold or Rejected</b>.
+    </div>
+
+    <!-- <label>Applicant ID</label>
+    <input type="text" id="applicantId" placeholder="e.g. SMEUser251"> -->
+
+    <!-- <label>Upload KYC Document (PAN / Aadhaar)</label>
+    <input type="file" id="kycFile" accept=".pdf,.jpg,.jpeg,.png">
+
+    <label>Upload Income Documents (ITR / Statements)</label>
+    <input type="file" id="incomeFile" accept=".pdf,.zip,.jpg,.jpeg,.png">
+
+    <label>Upload Business Proof (Registration / CIN)</label>
+    <input type="file" id="businessFile" accept=".pdf,.jpg,.jpeg,.png">
+
+
+    <label>Applicant's Industry</label>
+    <select id="industry">
+      <option value="">--Select--</option>
+      <option>Services</option>
+      <option>Trading</option>
+      <option>Manufacturing</option>
+    </select>
+
+    <label>Loan Amount Requested</label>
+    <input type="number" id="amount" placeholder="e.g. 1000000">
+
+    <label>Applicant's Category</label>
+    <select id="category">
+      <option value="">--Select--</option>
+      <option>Small</option>
+      <option>Medium</option>
+      <option>Large</option>
+    </select>
+
+    <label>Income Documents Submitted?</label>
+    <select id="incomeDoc">
+      <option value="">--Select--</option>
+      <option>Yes</option>
+      <option>No</option>
+    </select>
+
+    <label>KYC Submitted?</label>
+    <select id="kyc">
+      <option value="">--Select--</option>
+      <option>Yes</option>
+      <option>No</option>
+    </select>
+
+    <label>Business Proof Submitted?</label>
+    <select id="business">
+      <option value="">--Select--</option>
+      <option>Yes</option>
+      <option>No</option>
+    </select>
+
+    <button onclick="submitBot()">Ask Bot</button>
+
+    <div id="chatArea"></div> -->
+
+    <!-- <script>
+      function addMessage(text, cls) {
+        var div = document.createElement('div');
+        div.className = cls;
+        div.innerHTML = text;
+        document.getElementById('chatArea').appendChild(div);
+      }
+
+      function submitBot() {
+        var payload = {
+          applicantId: document.getElementById('applicantId').value,
+          industry   : document.getElementById('industry').value,
+          amount     : document.getElementById('amount').value,
+          category   : document.getElementById('category').value,
+          incomeDoc  : document.getElementById('incomeDoc').value,
+          kyc        : document.getElementById('kyc').value,
+          business   : document.getElementById('business').value
+        };
+
+        addMessage(
+          'User: ID=' + payload.applicantId +
+          ', Industry=' + payload.industry +
+          ', Docs [Income=' + payload.incomeDoc +
+          ', KYC=' + payload.kyc +
+          ', Business=' + payload.business + ']',
+          'bubble-user'
+        );
+
+        google.script.run
+          .withSuccessHandler(function(status) {
+            addMessage('Bot: Final status → <b>' + status + '</b>', 'bubble-bot');
+          })
+          .withFailureHandler(function(err) {
+            addMessage('Bot error: ' + err.message, 'bubble-bot');
+          })
+          .submitChatbotApplication(payload);
+      }
+    </script> -->
+
+    <!-- <script>
+      function showMsg(text, cls) {
+        var div = document.getElementById('msg');
+        div.className = 'msg ' + (cls || 'bot');
+        div.innerHTML = text;
+      }
+
+      function validateFile(input, allowedExt, maxSizeMB, label) {
+        var file = input.files[0];
+        if (!file) return null; // optional, no upload
+
+        var name = file.name.toLowerCase();
+        var sizeMB = file.size / (1024 * 1024);
+
+        // extension check
+        var okExt = allowedExt.some(function(ext) {
+          return name.endsWith(ext);
+        });
+        if (!okExt) {
+          showMsg(label + ' must be one of: ' + allowedExt.join(', '), 'err');
+          throw new Error('Invalid file type for ' + label);
+        }
+
+        // size check
+        if (sizeMB > maxSizeMB) {
+          showMsg(label + ' is too large. Max ' + maxSizeMB + ' MB allowed.', 'err');
+          throw new Error('File too large for ' + label);
+        }
+
+        return file;
+      }
+
+      function fileToObject(file) {
+        if (!file) return null;
+        return new Promise(function(resolve, reject) {
+          var reader = new FileReader();
+          reader.onload = function(e) {
+            var base64 = e.target.result.split(',')[1];
+            resolve({
+              filename: file.name,
+              mimeType: file.type,
+              bytes: base64
+            });
+          };
+          reader.onerror = reject;
+          reader.readAsDataURL(file);
+        });
+      }
+
+      async function submitAll() {
+        showMsg('Validating files...', 'bot');
+
+        try {
+          // 1) BASIC VALIDATION
+          var kycInput     = document.getElementById('kycFile');
+          var incomeInput  = document.getElementById('incomeFile');
+          var businessInput= document.getElementById('businessFile');
+
+          // Only these extensions allowed; max sizes (in MB) can be changed
+          var kycFile = validateFile(kycInput, ['.pdf','.jpg','.jpeg','.png'], 5, 'KYC document');
+          var incomeFile = validateFile(incomeInput, ['.pdf','.zip','.jpg','.jpeg','.png'], 10, 'Income document');
+          var businessFile = validateFile(businessInput, ['.pdf','.jpg','.jpeg','.png'], 5, 'Business proof');
+
+          showMsg('Encoding files and sending to server...', 'bot');
+
+          // 2) ENCODE TO BASE64 OBJECTS (for Apps Script)
+          var payload = {
+            email      : document.getElementById('email') ? document.getElementById('email').value : '',
+            applicantId: document.getElementById('applicantId').value,
+            industry   : document.getElementById('industry').value,
+            amount     : document.getElementById('amount').value,
+            category   : document.getElementById('category').value,
+            kycFile    : await fileToObject(kycFile),
+            incomeFile : await fileToObject(incomeFile),
+            businessFile: await fileToObject(businessFile)
+          };
+
+          google.script.run
+            .withSuccessHandler(function(status) {
+              showMsg('Final status: <b>' + status + '</b>', 'bot');
+            })
+            .withFailureHandler(function(err) {
+              showMsg('Error: ' + err.message, 'err');
+            })
+            .submitChatbotApplicationWithFiles(payload);
+
+        } catch (e) {
+          // validation error already shown
+          console.log(e);
+        }
+      }
+    </script> -->
+<!-- 
+  </body>
+</html> --> -->
